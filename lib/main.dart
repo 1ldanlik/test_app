@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:test_app/provider/theme_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app/theme.dart';
 
+import 'bloc/theme/theme_bloc.dart';
 import 'counter_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: Consumer<ThemeProvider>(
-        builder: (context, ThemeProvider themeNotifier, state) {
+    return BlocProvider(
+      create: (context) => ThemeBloc(),
+      child: BlocBuilder<ThemeBloc, ThemeMode>(
+        builder: (context, state) {
           return MaterialApp(
-            theme: themeNotifier.isDark ? AppTheme.dark : AppTheme.light,
+            theme: state == ThemeMode.dark ? AppTheme.dark : AppTheme.light,
             home: const CounterPage(),
           );
         },
